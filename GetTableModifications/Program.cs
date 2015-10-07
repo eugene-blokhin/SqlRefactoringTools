@@ -15,17 +15,14 @@ namespace GetTableModifications
         static int Main(string[] args)
         {
 
-                        if (args.Length < 1)
-                        {
-                            Console.Error.WriteLine("File is not specified. Usage: GetTableModifications example.sql.");
-                            return -1;
-                        }
+            if (args.Length < 1)
+            {
+                Console.Error.WriteLine("File is not specified. Usage: GetTableModifications example.sql.");
+                return -1;
+            }
             
-                        var filename = args[0];
-
-
-            //var filename = @"C:\Users\Eugene Blokhin\Downloads\SPs\BinFetch.sql";
-
+            var filename = args[0];
+            
             if (!File.Exists(filename))
             {
                 Console.Error.WriteLine("File was not found.");
@@ -76,7 +73,7 @@ namespace GetTableModifications
                             var columns = s.UpdateSpecification.SetClauses
                                 .OfType<AssignmentSetClause>()
                                 .Where(setClause => setClause.Column != null)
-                                .Select(setClause => setClause.Column.MultiPartIdentifier.Identifiers[0].Value);
+                                .Select(setClause => setClause.Column.MultiPartIdentifier.Identifiers.Last().Value);
                             
                             var target = ((NamedTableReference)s.UpdateSpecification.Target);
                             var name = AliasVisitor.ResolveAlias(s, target.SchemaObject.BaseIdentifier.Value);
